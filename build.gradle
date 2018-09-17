@@ -27,6 +27,9 @@ repositories {
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}")
+    compile("org.apache.tomcat.embed:tomcat-embed-el:${tomcatVersion}")
+    compile("org.apache.tomcat.embed:tomcat-embed-websocket:${tomcatVersion}")
     runtime('org.springframework.boot:spring-boot-devtools')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
