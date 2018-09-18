@@ -187,4 +187,30 @@ public final class VerificationCodeImageUtils {
         }
         return result;
     }
+
+    /**
+     * 识别验证码图片
+     *
+     * @param image 验证码图片
+     * @return 识别结果
+     */
+    public String recognition (BufferedImage image) {
+
+        // 降噪
+        doNoise(image);
+
+        // 分割图片
+        BufferedImage[] unitImages = split(image);
+
+        // 实例化验证码图片 StringBuilder 对象
+        StringBuilder verificationCode = new StringBuilder();
+
+        // 循环识别每一个单元的图片并拼接
+        for (BufferedImage unitImage : unitImages) {
+            verificationCode.append(unitRecognition(unitImage));
+        }
+
+        // 返回识别结果
+        return verificationCode.toString();
+    }
 }
