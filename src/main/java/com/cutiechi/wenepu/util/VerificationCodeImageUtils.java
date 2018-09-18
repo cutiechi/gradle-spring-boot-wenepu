@@ -2,12 +2,17 @@ package com.cutiechi.wenepu.util;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
+
+import java.awt.Color;
+
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,5 +71,26 @@ public final class VerificationCodeImageUtils {
             // 加载失败抛出 Runtime Exception, 失败的原因有: 识别验证码所依赖的 png 图片位置或数量不正确
             throw new RuntimeException("load verification code dependency image fail!");
         }
+    }
+
+    /**
+     * 根据像素颜色的亮度判断是否为目标像素
+     *
+     * @param colorRgb 像素颜色的 RGB 混合值
+     * @return 是否为目标像素
+     */
+    private Boolean isTarget (Integer colorRgb) {
+
+        // 根据像素颜色的 RGB 混合值实例化 Color 对象
+        Color color = new Color(colorRgb);
+
+        // 实例化长度为 3 的 float 数组, 用来存放 RGB 转为 HSB 后的色相, 饱和度, 亮度
+        float[] hsb = new float[3];
+
+        // 通过 RGBtoHSB 方法将像素的 HSB 存在 hsb 数组中
+        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
+
+        // 根据像素颜色的亮度判断是否为目标像素
+        return hsb[2] < 0.5f;
     }
 }
