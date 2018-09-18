@@ -43,6 +43,12 @@ public final class VerificationCodeImageUtils {
      */
     private static Map<BufferedImage, Character> dependencyMap;
 
+    // 单元图片的宽度
+    private Integer UNIT_WIDTH = 9;
+
+    // 单元图片的高度
+    private Integer UNIT_HEIGHT = 12;
+
     static {
 
         //  实例化依赖 Map
@@ -130,20 +136,55 @@ public final class VerificationCodeImageUtils {
         // 横坐标差值
         int differenceX = 10;
 
-        // 单元宽度
-        final int unitWidth = 9;
-
-        // 单元高度
-        final int unitHeight = 12;
-
         // 实例化长度为 4 的 Buffered Image 数组, 该数组用来存放分割后的四个单元 Buffered Image
         BufferedImage[] unitImages = new BufferedImage[4];
 
         // 将分割后的图片存放在 unitImages 数组中
-        unitImages[0] = image.getSubimage(baseX, baseY, unitWidth, unitHeight);
-        unitImages[1] = image.getSubimage(baseX + differenceX, baseY, unitWidth, unitHeight);
-        unitImages[2] = image.getSubimage(baseX + 2 * differenceX, baseY, unitWidth, unitHeight);
-        unitImages[3] = image.getSubimage(baseX + 3 * differenceX, baseY, unitWidth, unitHeight);
+        unitImages[0] = image.getSubimage(baseX, baseY, UNIT_WIDTH, UNIT_HEIGHT);
+        unitImages[1] = image.getSubimage(baseX + differenceX, baseY, UNIT_WIDTH, UNIT_HEIGHT);
+        unitImages[2] = image.getSubimage(baseX + 2 * differenceX, baseY, UNIT_WIDTH, UNIT_HEIGHT);
+        unitImages[3] = image.getSubimage(baseX + 3 * differenceX, baseY, UNIT_WIDTH, UNIT_HEIGHT);
         return unitImages;
+    }
+
+    /**
+     * 单元识别
+     *
+     * @param unitImage 单元图片
+     * @return 识别结果
+     */
+    private Character unitRecognition (BufferedImage unitImage) {
+
+        // 定义识别结果字符
+        char result = ' ';
+
+        // 初始最小差异像素为全部像素
+        int minDifferencePixel = UNIT_WIDTH * UNIT_HEIGHT;
+
+        // 遍历依赖 Map 中得 Key 即 Buffered Image
+        for (BufferedImage referenceImage : dependencyMap.keySet()) {
+
+            // 初始差异像素为 0
+            int differencePixel = 0;
+
+            // 逐像素比较
+            for (int x = 0; x < UNIT_WIDTH; x++) {
+                for (int y = 0; y < UNIT_HEIGHT; y++) {
+                    differencePixel += unitImage.getRGB(x, y) != referenceImage.getRGB(x, y) ? 1 : 0;
+
+                    // 当差异像素大于等于最小差异像素结束内层循环
+                    if (differencePixel >= minDifferencePixel) {
+                        break;
+                    }
+                }
+            }
+
+            // 差异像素比最小差异像素小时, 将差异像素的值给最小差异像素, 识别结果字符为依赖 Map 的 Value
+            if (differencePixel < minDifferencePixel) {
+                minDifferencePixel = differencePixel;
+                result = dependencyMap.get(referenceImage);
+            }
+        }
+        return result;
     }
 }
