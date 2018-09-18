@@ -2,13 +2,11 @@ package com.cutiechi.wenepu.util;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 
 import java.awt.Color;
-
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
@@ -92,5 +90,26 @@ public final class VerificationCodeImageUtils {
 
         // 根据像素颜色的亮度判断是否为目标像素
         return hsb[2] < 0.5f;
+    }
+
+    /**
+     * 降噪, 将有用的像素设为黑色, 无用的像素设为白色
+     *
+     * @param image 验证码图片
+     */
+    private void doNoise (BufferedImage image) {
+
+        // 验证码图片的宽度
+        int width = image.getWidth();
+
+        // 验证码图片的高度
+        int height = image.getHeight();
+
+        // 根据 isTarget 方法将有用像素的 RGB 值设为黑色, 无用的设为白色
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                image.setRGB(x, y, isTarget(image.getRGB(x, y)) ? Color.BLACK.getRGB() : Color.WHITE.getRGB());
+            }
+        }
     }
 }
