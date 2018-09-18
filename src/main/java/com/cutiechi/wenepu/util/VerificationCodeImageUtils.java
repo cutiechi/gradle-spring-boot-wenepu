@@ -112,4 +112,38 @@ public final class VerificationCodeImageUtils {
             }
         }
     }
+
+    /**
+     * 分割验证码图片
+     *
+     * @param image 验证码图片
+     * @return 分割后的单元图片数组
+     */
+    private BufferedImage[] split (BufferedImage image) {
+
+        // 原点横坐标
+        int baseX = 3;
+
+        // 原点纵坐标
+        int baseY = 4;
+
+        // 横坐标差值
+        int differenceX = 10;
+
+        // 单元宽度
+        final int unitWidth = 9;
+
+        // 单元高度
+        final int unitHeight = 12;
+
+        // 实例化长度为 4 的 Buffered Image 数组, 该数组用来存放分割后的四个单元 Buffered Image
+        BufferedImage[] unitImages = new BufferedImage[4];
+
+        // 将分割后的图片存放在 unitImages 数组中
+        unitImages[0] = image.getSubimage(baseX, baseY, unitWidth, unitHeight);
+        unitImages[1] = image.getSubimage(baseX + differenceX, baseY, unitWidth, unitHeight);
+        unitImages[2] = image.getSubimage(baseX + 2 * differenceX, baseY, unitWidth, unitHeight);
+        unitImages[3] = image.getSubimage(baseX + 3 * differenceX, baseY, unitWidth, unitHeight);
+        return unitImages;
+    }
 }
