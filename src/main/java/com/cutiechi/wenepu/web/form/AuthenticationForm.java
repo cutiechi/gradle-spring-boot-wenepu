@@ -2,6 +2,7 @@ package com.cutiechi.wenepu.web.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -9,9 +10,10 @@ import lombok.Setter;
  *
  * @author Cutie Chi
  */
-@Getter
-@Setter
 @AllArgsConstructor
+@Getter
+@NoArgsConstructor
+@Setter
 public class AuthenticationForm {
 
     /**
