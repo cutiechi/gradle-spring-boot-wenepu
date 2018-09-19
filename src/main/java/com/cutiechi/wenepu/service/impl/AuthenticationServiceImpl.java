@@ -60,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private String[] getWebVerification () throws NepuServerErrorException {
 
         // 获取 Web 验证信息所请求的 URL
-        final String WEB_VERIFICATION_URL = "http://jwgl.nepu.edddddu.cn/verifycode.servlet";
+        final String WEB_VERIFICATION_URL = "http://jwgl.nepu.edu.cn/verifycode.servlet";
 
         // JSESSIONID 在响应头部中的 Key
         final String HEADER_JSESSIONID_KEY = "Set-Cookie";
