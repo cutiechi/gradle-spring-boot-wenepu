@@ -157,8 +157,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // Web 验证信息数组的第二个元素为 Web Token
         final String webToken = webVerification[1];
 
-        System.out.println(webToken);
-        System.out.println(verificationCode);
         // 从鉴权表单中获取学号
         final String studentNumber = authenticationForm.getStudentNumber();
 
