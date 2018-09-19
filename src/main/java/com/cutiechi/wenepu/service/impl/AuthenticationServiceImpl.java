@@ -212,8 +212,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             // 获取文档的标题
             final String title = document.title();
 
-            System.out.println(title);
-
             // 当标题长度不为 21 的时候登录东北石油大学教务管理系统成功
             if (21 != title.length()) {
 
