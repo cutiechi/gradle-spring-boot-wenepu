@@ -1,2 +1,21 @@
 server:
+
+  # 服务器端口号为 8300
   port: 8300
+
+wenepu:
+
+  # 和开课学期相关业务逻辑有关的配置项
+  semester:
+    list-all-url: http://jwgl.nepu.edu.cn/tkglAction.do
+    method-key: method
+    method-value: kbxxXs
+    cookie-key: JSESSIONID
+    timeout: 10000
+    error-title: 出错页面
+    select-element-id: xnxqh
+    option-element-name: option
+    spring-semester-original-end-with: 1
+    spring-semester-alias: 春季学期
+    autumn-semester-alias: 夏季学期
+    semester-alias-separator: ' 年'
