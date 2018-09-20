@@ -5,6 +5,24 @@ server:
 
 wenepu:
 
+  #  和鉴权业务逻辑有关的配置项
+  authentication:
+    web-verification-url: http://jwgl.nepu.edu.cn/verifycode.servlet
+    header-j-session-id-key: Set-Cookie
+    login-url: http://jwgl.nepu.edu.cn/Logon.do
+    method-key: method
+    method-value: logon
+    student-number-key: USERNAME
+    student-password-key: PASSWORD
+    verification-code-key: RANDOMCODE
+    cookie-key: JSESSIONID
+    timeout: 5000
+    error-title-length: 21
+    first-redirect-url: http://jwgl.nepu.edu.cn/framework/main.jsp
+    second-redirect-url: http://jwgl.nepu.edu.cn/Logon.do
+    second-redirect-method-value: logonBySSO
+
+
   # 和开课学期相关业务逻辑有关的配置项
   semester:
     list-all-url: http://jwgl.nepu.edu.cn/tkglAction.do
