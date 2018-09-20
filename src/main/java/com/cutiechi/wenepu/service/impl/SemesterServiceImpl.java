@@ -121,7 +121,7 @@ public class SemesterServiceImpl implements SemesterService {
         } catch (IOException exception) {
 
             // 发生 IOException 说明东北石油大学教务管理系统服务器错误, 抛出异常
-            throw new NepuServerErrorException("服务器错误，获取全部开课学期列表成功！");
+            throw new NepuServerErrorException("服务器错误，获取全部开课学期列表失败！");
         }
     }
 }
