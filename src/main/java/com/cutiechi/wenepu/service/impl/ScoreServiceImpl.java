@@ -125,8 +125,8 @@ public class ScoreServiceImpl implements ScoreService {
                             // 第六个 td 中的第一个 a 的文本值为课程成绩
                             courseScoreA.text(),
 
-                            // 第六个 td 中的第一个 a 的 onclick 属性的值从 '/' 到 ''' 之间为获取成绩详情需要的 URI
-                            courseScoreAAttrOnClick.substring(courseScoreAAttrOnClick.indexOf("/"), courseScoreAAttrOnClick.lastIndexOf("'")),
+                            // 第六个 td 中的第一个 a 的 onclick 属性的值从 '&' 到 ''' 之间为获取成绩详情需要的 URI
+                            courseScoreAAttrOnClick.substring(courseScoreAAttrOnClick.indexOf("&") + 1, courseScoreAAttrOnClick.lastIndexOf("'")),
 
                             // 第七个 td 中的文本值为课程成绩标志
                             tds.get(6).text(),
