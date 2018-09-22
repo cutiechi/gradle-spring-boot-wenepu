@@ -1,10 +1,19 @@
 package com.cutiechi.wenepu.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * 成绩详情
  *
  * @author Cutie Chi
  */
+@AllArgsConstructor
+@Getter
+@NoArgsConstructor
+@Setter
 public class ScoreDetail {
 
     /**
