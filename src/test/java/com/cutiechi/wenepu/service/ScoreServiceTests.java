@@ -46,4 +46,30 @@ class ScoreServiceTests extends ApplicationTests {
             System.out.println("服务器错误，获取成绩失败！");
         }
     }
+
+    /**
+     * 测试根据课程成绩详情 URI 获取课程成绩详情
+     */
+    @Test
+    void testGetDetailByDetailUri () {
+
+        // 使用你的 WebToken 替换下面的空字符串
+        final String webToken = "";
+
+        // 从东北石油大学教务管理系统 a 元素 attribute 获取到的 URI
+        final String detailUri = "";
+
+        try {
+
+            // 获取成绩详情
+            ServiceResult result = scoreService.getDetailByDetailUri(webToken, detailUri);
+
+            // 返回结果的消息取决于你的 Web Token 和 URI 的正确性
+            System.out.println(result.getMessage());
+        } catch (NepuServerErrorException exception) {
+
+            // 当东北石油大学教务管理系统打不开获取服务器错误的时候打印
+            System.out.println("服务器错误，获取成绩详情失败！");
+        }
+    }
 }
