@@ -58,4 +58,27 @@ public class ScoreController {
             ? new JsonResponse(20000, result.getMessage(), result.getResult())
             : new JsonResponse(40003, result.getMessage());
     }
+
+    /**
+     * 根据课程成绩详情 URI 获取课程成绩详情, API 为 GET 方式请求 /scores/details/{detailUri}
+     *
+     * @param webToken Web Token
+     * @param detailUri 从东北石油大学教务管理系统 a 元素 attribute 获取到的 URI
+     * @return JSON 响应
+     * @throws NepuServerErrorException 东北石油大学教务管理系统服务器错误异常
+     */
+    @GetMapping("/details/{detailUri}")
+    public JsonResponse getDetailByDetailUri (
+        @RequestHeader("Web-Token") final String webToken,
+        @PathVariable("detailUri") final String detailUri
+    ) throws NepuServerErrorException {
+
+        // 获取附带成绩详情的业务逻辑结果对象
+        ServiceResult result = scoreService.getDetailByDetailUri(webToken, detailUri);
+
+        // 根据业务逻辑结果中的状态返回 JSON 响应
+        return result.getStatus()
+            ? new JsonResponse(20000, result.getMessage(), result.getResult())
+            : new JsonResponse(40003, result.getMessage());
+    }
 }
