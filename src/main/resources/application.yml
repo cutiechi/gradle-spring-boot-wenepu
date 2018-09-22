@@ -37,3 +37,20 @@ wenepu:
     spring-semester-alias: 春季学期
     autumn-semester-alias: 夏季学期
     semester-alias-separator: ' 年'
+
+  # 和成绩业务逻辑有关的配置项
+  score:
+    method-key: method
+    cookie-key: JSESSIONID
+    timeout: 5000
+    error-title: 出错页面
+    td-element-name: td
+    span-element-name: span
+    tr-element-name: tr
+    a-element-name: a
+    attribute-onclick-key: onclick
+    get-by-semester-original-url: http://jwgl.nepu.edu.cn/xszqcjglAction.do
+    get-by-semester-original-method-value: queryxscj
+    get-by-semester-original-semester-original-key: kksj
+    total-credit-td-father-element-id: tblBm
+    score-item-tr-father-element-id: mxh
