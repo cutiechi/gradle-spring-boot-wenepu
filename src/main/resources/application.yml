@@ -54,3 +54,4 @@ wenepu:
     get-by-semester-original-semester-original-key: kksj
     total-credit-td-father-element-id: tblBm
     score-item-tr-father-element-id: mxh
+    get-detail-by-detail-uri-base-url: http://jwgl.nepu.edu.cn/xszqcjglAction.do?method=querypscj&

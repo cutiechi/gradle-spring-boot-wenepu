@@ -83,4 +83,9 @@ public class ScoreConfig {
      * 每一条成绩项所在 tr 的父元素 ID
      */
     private String scoreItemTrFatherElementId;
+
+    /**
+     * 根据课程成绩详情 URI 获取课程成绩详情请求的 URL
+     */
+    private String getDetailByDetailUriBaseUrl;
 }
