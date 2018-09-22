@@ -19,4 +19,14 @@ public interface ScoreService {
      * @throws NepuServerErrorException 东北石油大学教务管理系统服务器错误异常
      */
     ServiceResult getBySemesterOriginal (final String semesterOriginal, final String webToken) throws NepuServerErrorException;
+
+    /**
+     * 根据课程成绩详情 URI 获取课程成绩详情
+     *
+     * @param webToken Web Token
+     * @param detailUri 从东北石油大学教务管理系统 a 元素 attribute 获取到的 URI
+     * @return 附带成绩详情的业务逻辑结果
+     * @throws NepuServerErrorException 东北石油大学教务管理系统服务器错误异常
+     */
+    ServiceResult getDetailByDetailUri (final String webToken, final String detailUri) throws NepuServerErrorException;
 }

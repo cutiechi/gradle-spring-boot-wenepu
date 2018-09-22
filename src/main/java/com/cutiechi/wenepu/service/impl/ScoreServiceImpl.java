@@ -3,6 +3,7 @@ package com.cutiechi.wenepu.service.impl;
 import com.cutiechi.wenepu.config.ScoreConfig;
 import com.cutiechi.wenepu.exception.NepuServerErrorException;
 import com.cutiechi.wenepu.model.Score;
+import com.cutiechi.wenepu.model.ScoreDetail;
 import com.cutiechi.wenepu.model.ScoreItem;
 import com.cutiechi.wenepu.model.dto.ServiceResult;
 import com.cutiechi.wenepu.service.ScoreService;
@@ -168,6 +169,76 @@ public class ScoreServiceImpl implements ScoreService {
 
             // 当发生 IOException 时说明东北石油大学教务管理系统连接失败, 抛出异常
             throw new NepuServerErrorException("服务器错误，获取成绩失败！");
+        }
+    }
+
+    /**
+     * 根据课程成绩详情 URI 获取课程成绩详情
+     *
+     * @param webToken Web Token
+     * @param detailUri 从东北石油大学教务管理系统 a 元素 attribute 获取到的 URI
+     * @return 附带成绩详情的业务逻辑结果
+     * @throws NepuServerErrorException 东北石油大学教务管理系统服务器错误异常
+     */
+    @Override
+    public ServiceResult getDetailByDetailUri (String webToken, String detailUri) throws NepuServerErrorException {
+
+        // 拼接获取成绩详情请求的完整 URL
+        final String url = scoreConfig.getGetDetailByDetailUriBaseUrl() + detailUri;
+
+        // 获取 Jsoup 连接对象
+        final Connection connection = Jsoup
+            .connect(url)
+            .cookie(scoreConfig.getCookieKey(), webToken)
+            .timeout(scoreConfig.getTimeout());
+
+        try {
+
+            // 获取 Jsoup 连接对象 POST 请求返回的文档对象, 此时可能发生 IOException
+            Document document = connection.post();
+
+            // 当文档对象的标题不是请求错误时的标题继续
+            if (!scoreConfig.getErrorTitle().equals(document.title())) {
+                Elements tds = document
+
+                    // 通过元素 ID 获取成绩详情所在 tr 的父元素对象
+                    .getElementById(scoreConfig.getScoreItemTrFatherElementId())
+
+                    // 获取 tr 中的所有 td
+                    .select(scoreConfig.getTdElementName());
+
+                // 返回附带成绩详情的业务逻辑结果
+                return ServiceResult.success("获取成绩详情成功！", new ScoreDetail(
+
+                    // 第一个 td 的文本值为平时成绩
+                    tds.get(0).text(),
+
+                    // 第二个 td 的文本值为平时成绩比例
+                    tds.get(1).text(),
+
+                    // 第三个 td 的文本值为期中成绩
+                    tds.get(2).text(),
+
+                    // 第四个 td 的文本值为期中成绩比例
+                    tds.get(3).text(),
+
+                    // 第五个 td 的文本值为期末成绩
+                    tds.get(4).text(),
+
+                    // 第六个 td 的文本值为期末成绩比例
+                    tds.get(5).text(),
+
+                    // 第七个 td 的文本值为总成绩
+                    tds.get(6).text()
+                ));
+            } else {
+                // 当文档标题时请求错误时的标题则返回附带错误信息的业务逻辑结果对象
+                return ServiceResult.fail("Web Token 错误，获取成绩详情失败！");
+            }
+        } catch (IOException exception) {
+
+            // 当发生 IOException 时说明东北石油大学教务管理系统连接失败, 抛出异常
+            throw new NepuServerErrorException("服务器错误，获取成绩详情失败！");
         }
     }
 }
