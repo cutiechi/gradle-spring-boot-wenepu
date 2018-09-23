@@ -21,6 +21,12 @@ wenepu:
     first-redirect-url: http://jwgl.nepu.edu.cn/framework/main.jsp
     second-redirect-url: http://jwgl.nepu.edu.cn/Logon.do
     second-redirect-method-value: logonBySSO
+    get-app-token-method-value: authUser
+    get-app-token-student-number-key: xh
+    get-app-token-student-password-key: pwd
+    get-app-token-url: http://jwgl.nepu.edu.cn/app.do
+    app-token-json-key: token
+    error-app-token: -1
 
 
   # 和开课学期相关业务逻辑有关的配置项

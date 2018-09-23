@@ -58,4 +58,32 @@ public final class AuthenticationConfig {
 
     // 请求超时时间
     private Integer timeout;
+
+    // 获取 App Token 请求方法的值
+    private String getAppTokenMethodValue;
+
+    /**
+     * 获取 App Token 请求携带学生编号的 Key
+     */
+    private String getAppTokenStudentNumberKey;
+
+    /**
+     * 获取 App Token 请求携带学生密码的 Key
+     */
+    private String getAppTokenStudentPasswordKey;
+
+    /**
+     * 获取 App Token 请求的 URL
+     */
+    private String getAppTokenUrl;
+
+    /**
+     * 获取 App Token 返回的 JSON 字符串中 App Token 的 Key
+     */
+    private String appTokenJsonKey;
+
+    /**
+     * 当学号或密码不正确时返回的 App Token
+     */
+    private String errorAppToken;
 }
