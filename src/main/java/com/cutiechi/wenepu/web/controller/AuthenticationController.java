@@ -43,4 +43,23 @@ public class AuthenticationController {
             ? new JsonResponse(20000, result.getMessage(), result.getResult())
             : new JsonResponse(40001, result.getMessage());
     }
+
+    /**
+     * 获取 App Token, API 为 /authentication/token/app
+     *
+     * @param authenticationForm 鉴权表单
+     * @return JSON 响应
+     * @throws NepuServerErrorException 东北石油大学教务管理系统服务器错误异常
+     */
+    @PostMapping("/token/app")
+    public JsonResponse getAppToken (@RequestBody AuthenticationForm authenticationForm) throws NepuServerErrorException {
+
+        // 获取附带 App Token 的业务逻辑结果
+        ServiceResult result = authenticationService.getAppToken(authenticationForm);
+
+        // 根据业务逻辑结果中的状态返回 JSON 响应
+        return result.getStatus()
+            ? new JsonResponse(20000, result.getMessage(), result.getResult())
+            : new JsonResponse(40001, result.getMessage());
+    }
 }
