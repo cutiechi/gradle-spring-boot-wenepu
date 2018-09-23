@@ -20,4 +20,13 @@ public interface AuthenticationService {
      * @throws NepuServerErrorException 东北石油大学教务管理系统服务器错误异常
      */
     ServiceResult getWebToken (AuthenticationForm authenticationForm) throws NepuServerErrorException;
+
+    /**
+     * 获取 App Token
+     *
+     * @param authenticationForm 包含学号和密码的鉴权表单
+     * @return 附带 App Token 的业务逻辑结果
+     * @throws NepuServerErrorException 东北石油大学教务管理系统服务器错误异常
+     */
+    ServiceResult getAppToken (final AuthenticationForm authenticationForm) throws NepuServerErrorException;
 }

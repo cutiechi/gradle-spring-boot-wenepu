@@ -4,9 +4,11 @@ import com.cutiechi.wenepu.config.AuthenticationConfig;
 import com.cutiechi.wenepu.exception.NepuServerErrorException;
 import com.cutiechi.wenepu.model.dto.ServiceResult;
 import com.cutiechi.wenepu.service.AuthenticationService;
+import com.cutiechi.wenepu.util.JsonUtils;
 import com.cutiechi.wenepu.util.VerificationCodeImageUtils;
 import com.cutiechi.wenepu.web.form.AuthenticationForm;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -45,15 +47,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final VerificationCodeImageUtils verificationCodeImageUtils;
 
     /**
+     * JSON 工具类实例
+     */
+    private final JsonUtils jsonUtils;
+
+    /**
      * Spring 自动注入依赖
      *
      * @param verificationCodeImageUtils 获取 Web 验证信息时识别验证码图片的工具类
-     * @param authenticationConfig       鉴权配置类对象
+     * @param authenticationConfig 鉴权配置类对象
+     * @param jsonUtils JSON 工具类实例
      */
     @Autowired
-    public AuthenticationServiceImpl (VerificationCodeImageUtils verificationCodeImageUtils, AuthenticationConfig authenticationConfig) {
+    public AuthenticationServiceImpl (VerificationCodeImageUtils verificationCodeImageUtils, AuthenticationConfig authenticationConfig, JsonUtils jsonUtils) {
         this.verificationCodeImageUtils = verificationCodeImageUtils;
         this.authenticationConfig = authenticationConfig;
+        this.jsonUtils = jsonUtils;
     }
 
     /**
@@ -91,6 +100,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
                 // 响应状态码为 200 时继续
                 if (HttpStatus.OK.value() == response.code()) {
+
                     // 实例化响应 Body 对象
                     final ResponseBody body = response.body();
 
@@ -203,5 +213,76 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             // 当发生 IOException 时抛出东北石油大学服务器错误异常
             throw new NepuServerErrorException("服务器错误，获取 Web Token 失败！");
         }
+    }
+
+    /**
+     * 获取 App Token
+     *
+     * @param authenticationForm 包含学号和密码的鉴权表单
+     * @return 附带 App Token 的业务逻辑结果
+     * @throws NepuServerErrorException 东北石油大学教务管理系统服务器错误异常
+     */
+    @Override
+    public ServiceResult getAppToken (final AuthenticationForm authenticationForm) throws NepuServerErrorException {
+
+        // 实例化 OkHttpClient 对象
+        final OkHttpClient client = new OkHttpClient();
+
+        // 实例化 FormBody 对象
+        final FormBody body = new FormBody
+            .Builder()
+            .add(authenticationConfig.getMethodKey(), authenticationConfig.getGetAppTokenMethodValue())
+            .add(authenticationConfig.getGetAppTokenStudentNumberKey(), authenticationForm.getStudentNumber())
+            .add(authenticationConfig.getGetAppTokenStudentPasswordKey(), authenticationForm.getStudentPassword())
+            .build();
+
+        // 实例化 Request 对象
+        final Request request = new Request
+            .Builder()
+            .url(authenticationConfig.getGetAppTokenUrl())
+            .post(body)
+            .build();
+        try {
+
+            // 获取请求返回的响应, 此时可能发生 IOException
+            Response response = client.newCall(request).execute();
+
+            // 响应状态码为 200 时继续
+            if (HttpStatus.OK.value() == response.code()) {
+
+                // 获取响应 Body 对象
+                final ResponseBody responseBody = response.body();
+
+                // 响应 Body 不为空时继续
+                if (null != responseBody) {
+
+                    // 获取返回的 data
+                    final String data = responseBody.string();
+
+                    // 使用 JSON 工具类从 data 字符串中获取 App Token
+                    String appToken = jsonUtils.getObject(data, authenticationConfig.getAppTokenJsonKey()).toString();
+
+                    // 判断 App Token 是否为错误 App Token
+                    if (!authenticationConfig.getErrorAppToken().equals(appToken)) {
+
+                        // 返回附带 App Token 的业务逻辑结果
+                        return ServiceResult.success("获取 App Token 成功！", appToken);
+                    } else {
+
+                        // 当 App Token 为错误 App Token 时返回附带错误信息的业务逻辑结果
+                        return ServiceResult.fail("学号或密码错误，获取 App Token 失败！");
+                    }
+                }
+            } else {
+
+                // 响应状态码不为 200 时抛出自定义的 NEPU 服务器错误异常
+                throw new NepuServerErrorException("服务器错误，获取 App Token 失败！");
+            }
+        } catch (IOException exception) {
+
+            // 无法获取响应发生 IOException 异常时抛出自定义的 NEPU 服务器错误异常
+            throw new NepuServerErrorException("服务器错误，获取 App Token 失败！");
+        }
+        return null;
     }
 }
