@@ -1,7 +1,5 @@
 package com.cutiechi.wenepu.util;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
@@ -10,6 +8,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,12 +62,15 @@ public final class VerificationCodeImageUtils {
             // 遍历验证码字符数组为依赖的 Map 赋值
             for (char verificationCodeChar : verificationCodeChars) {
 
-                // 加载验证码图片到 Buffered Image 对象
-                Resource resource = new ClassPathResource(prefix + verificationCodeChar + suffix);
-                BufferedImage image = ImageIO.read(resource.getFile());
+                // 加载验证码图片到输入流
+                try (InputStream imageStream = VerificationCodeImageUtils.class.getClassLoader().getResourceAsStream(prefix + verificationCodeChar + suffix)) {
 
-                // 添加到依赖 Map 中
-                dependencyMap.put(image, verificationCodeChar);
+                    // 加载验证码图片流到 Buffered Image 对象
+                    BufferedImage image = ImageIO.read(imageStream);
+
+                    // 添加到依赖 Map 中
+                    dependencyMap.put(image, verificationCodeChar);
+                }
             }
         } catch (IOException exception) {
 
